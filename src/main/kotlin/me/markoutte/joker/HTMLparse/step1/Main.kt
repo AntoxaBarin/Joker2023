@@ -1,4 +1,4 @@
-package me.markoutte.joker.HTMLparse
+package me.markoutte.joker.HTMLparse.step1
 
 import me.markoutte.joker.helpers.ComputeClassWriter
 import org.apache.commons.cli.DefaultParser
@@ -16,9 +16,6 @@ import java.nio.file.StandardOpenOption
 import java.util.concurrent.TimeUnit
 import kotlin.io.path.writeBytes
 import kotlin.random.Random
-import kotlin.arrayOf
-import kotlin.text.Regex
-import kotlin.Array
 
 @ExperimentalStdlibApi
 fun main(args: Array<String>) {
@@ -57,7 +54,7 @@ fun main(args: Array<String>) {
                 </body>
                 </html>""".asByteArray(b.size)!!
     )
-    
+
     while(System.nanoTime() - start < TimeUnit.SECONDS.toNanos(timeout)) {
         val buffer = seeds.values.randomOrNull(random)?.let(Random::mutate)
             ?: b.apply(random::nextBytes)
@@ -199,7 +196,7 @@ fun Random.mutate(buffer: ByteArray): ByteArray {
     val mutatedHtml = StringBuilder(htmlString)
 
     val addTagProbability = 0.3
-    val removeTagProbability = 0.1
+    val removeTagProbability = 0.05
     val tagRegex = "<[^>]+>".toRegex()
     var tags = tagRegex.findAll(htmlString).map { it.value }.toList()
 
